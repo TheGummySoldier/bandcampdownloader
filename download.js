@@ -11,12 +11,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-
-
-var audio;
-
-
-async function x(){ 
+async function download(){ 
   const x = await rl.question('Input URL: ')
   got(x).then(response => {
     const dom = new JSDOM(response.body);
@@ -29,25 +24,18 @@ async function x(){
           throw TypeError('No download avaliable');
       } else {
         var audio = data.trackinfo[0].file["mp3-128"];
-        console.log(audio)
-        https.get((audio),
-          (response)=>{
+        https.get(audio, (response) => {
           const filepath = path.join(__dirname, `/${data.trackinfo[0].title}.mp3`);
           const writeStream = fs.createWriteStream(filepath);
-      
           response.pipe(writeStream);
-      
           writeStream.on("finish", () => {
             writeStream.close();
-            console.log(`${filepath} downloaded!`); /*new additions*/
-            console.log(fs.readdirSync(__dirname))
-          process.exit()
+            console.log(`${filepath} downloaded!`);
           }
           )
         }
         )
       }
-
   }
   ).catch(err => {
     console.log(err);
@@ -55,6 +43,4 @@ async function x(){
   );
 };
 
-
-
-x();
+download();
