@@ -12,6 +12,11 @@ const rl = readline.createInterface({
 });
 
 async function download(){ 
+  const outputFolder = path.join(__dirname, '_out')
+  if (!fs.existsSync(outputFolder)){
+    fs.mkdirSync(outputFolder)
+  }
+
   const x = await rl.question('Input URL: ')
   got(x).then(response => {
     const dom = new JSDOM(response.body);
@@ -25,7 +30,7 @@ async function download(){
       } else {
         var audio = data.trackinfo[0].file["mp3-128"];
         https.get(audio, (response) => {
-          const filepath = path.join(__dirname, `/${data.trackinfo[0].title}.mp3`);
+          const filepath = path.join(__dirname, `_out/${data.trackinfo[0].title}.mp3`);
           const writeStream = fs.createWriteStream(filepath);
           response.pipe(writeStream);
           writeStream.on("finish", () => {
