@@ -35,7 +35,7 @@ async function download(){
           response.pipe(writeStream);
           writeStream.on("finish", () => {
             writeStream.close();
-            console.log(`${filepath} downloaded!`);
+            console.log(`${data.trackinfo[0].title}.mp3 downloaded!`);
           }
           )
         }
